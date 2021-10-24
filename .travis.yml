@@ -1,0 +1,24 @@
+ sudo: required
+ services:
+  - docker
+
+before_install:
+  - docker build -t krbl/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true krbl/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t krbl/multi-client ./client
+  - docker build -t krbl/multi-nginx ./nginx
+  - docker build -t krlb/multi-server ./server
+  - docker build -t krbl/multi-worker ./worker
+
+# Log in to docker cli
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+# push to docker hub
+- docker push krbl/multi-client
+- docker push krbl/multi-nginx
+- docker push krbl/multi-server
+- docker push krbl/multi-worker
