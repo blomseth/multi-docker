@@ -11,7 +11,7 @@ script:
 after_success:
   - docker build -t krbl/multi-client ./client
   - docker build -t krbl/multi-nginx ./nginx
-  - docker build -t krlb/multi-server ./server
+  - docker build -t krbl/multi-server ./server
   - docker build -t krbl/multi-worker ./worker
 
   # Log in to docker cli
